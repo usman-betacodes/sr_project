@@ -1,0 +1,36 @@
+# Python
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Environment & secrets
+.env
+.env.*
+
+# Qdrant runtime (empty / regenerated on server)
+qdrant_storage/
+storage/
+snapshots/
+.qdrant-initialized
+
+# Qdrant binary (install or use Docker on staging)
+qdrant
+
+# Speaker vectors — deploy separately (rsync/scp); remove this line to track in git
+#qdrant_data/
+
+# Local enrollment / upload scratch
+raw_data/
+
+# IDE & OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
