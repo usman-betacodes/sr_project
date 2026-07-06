@@ -1,29 +1,3 @@
-"""
-enroll_pipeline.py — Full speaker enrollment pipeline (Phase 1 + Phase 2)
-
-Phase 1: Raw media → 5-second WAV chunks (silence stripped)
-Phase 2: Chunks → Triton ECAPA embeddings → Qdrant upsert
-
-Folder layout expected under --raw:
-    <raw>/<SpeakerName>/interview.mp4
-    <raw>/<SpeakerName>/speech.wav
-
-Usage:
-    python3 scripts/enroll_pipeline.py \\
-        --raw ./raw_data \\
-        --processed ./processed_dataset
-
-    # Process chunks only (no Triton/Qdrant needed):
-    python3 scripts/enroll_pipeline.py --raw ... --processed ... --skip-enroll
-
-    # Enroll existing chunks only (skip Phase 1):
-    python3 scripts/enroll_pipeline.py --processed ... --skip-process
-
-Requirements:
-    - ffmpeg on PATH
-    - Phase 2: Qdrant on :6333, Triton at TRITON_URL (office network)
-"""
-
 from __future__ import annotations
 
 import argparse
@@ -50,21 +24,24 @@ from tritonclient.http import (
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+sys.path.insert(0, os.path.join(PROJECT_ROOT, "api"))
+
+from config import (  # noqa: E402
+    CHUNK_SIZE,
+    COLLECTION_NAME,
+    INPUT_NAME,
+    MODEL_NAME,
+    OUTPUT_NAME,
+    QDRANT_URL,
+    SAMPLE_RATE,
+    TRITON_URL,
+    VECTOR_SIZE,
+)
 
 DEFAULT_RAW_DIR = os.path.join(PROJECT_ROOT, "raw_data")
 DEFAULT_PROCESSED_DIR = os.path.join(PROJECT_ROOT, "processed_dataset")
 
-QDRANT_URL = os.getenv("QDRANT_URL", "http://localhost:6333")
-TRITON_URL = os.getenv("TRITON_URL", "192.168.18.30:8040")
-
-COLLECTION_NAME = "speakers"
-VECTOR_SIZE = 192
-MODEL_NAME = "ecapa_speaker_verification"
-INPUT_NAME = "audio_input"
-OUTPUT_NAME = "embeddings"
-
-SAMPLE_RATE = 16000
-TRITON_CHUNK_SZ = 16000
+TRITON_CHUNK_SZ = CHUNK_SIZE
 CHUNK_LENGTH_MS = 5000
 DEFAULT_TARGET_CHUNKS = 240
 

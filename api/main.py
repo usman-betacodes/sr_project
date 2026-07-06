@@ -1,19 +1,7 @@
-"""
-main.py — Entry point for the Speaker Identification API
-
-Start with:
-    uvicorn main:app --host 0.0.0.0 --port 8080 --reload
-
-Port map:
-    localhost:8080  →  This API
-    localhost:6333  →  Qdrant (qdrant_storage/)
-    192.168.18.30:8040  →  Triton inference server (office)
-"""
-
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from config import QDRANT_URL, COLLECTION_NAME
+from config import API_HOST, API_PORT, COLLECTION_NAME, QDRANT_URL, TRITON_URL
 from triton_service import create_triton_client
 from database import create_qdrant_client
 from routers.identify import router as identify_router
@@ -29,9 +17,9 @@ async def lifespan(app: FastAPI):
     print("[startup] Connecting to Triton...")
     try:
         app.state.triton = create_triton_client()
-    except RuntimeError as e:
+    except Exception as e:
         print(f"[startup]  Triton unreachable: {e}")
-        print("[startup]    Are you on the office network? Check 192.168.18.30:8040")
+        print(f"[startup]    Check TRITON_URL: {TRITON_URL}")
         app.state.triton = None   # API will start but /identify returns 503
 
     print("[startup] Connecting to Qdrant...")
@@ -110,4 +98,4 @@ async def health():
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("main:app", host="0.0.0.0", port=8080, reload=True)
+    uvicorn.run("main:app", host=API_HOST, port=API_PORT, reload=True)

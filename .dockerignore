@@ -1,0 +1,17 @@
+venv/
+.venv/
+.git/
+.gitignore
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+qdrant_data/
+qdrant_storage/
+storage/
+snapshots/
+raw_data/
+processed_dataset/
+qdrant
+.idea/
+.vscode/

@@ -11,7 +11,8 @@ build/
 
 # Environment & secrets
 .env
-.env.*
+!.env.example
+
 
 # Qdrant runtime (empty / regenerated on server)
 qdrant_storage/
@@ -23,7 +24,7 @@ snapshots/
 qdrant
 
 # Speaker vectors — deploy separately (rsync/scp); remove this line to track in git
-#qdrant_data/
+qdrant_data/
 
 # Local enrollment / upload scratch
 raw_data/

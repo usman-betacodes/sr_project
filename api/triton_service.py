@@ -29,8 +29,8 @@ def create_triton_client() -> InferenceServerClient:
         print(f"[triton_service] ✅ Connected to Triton at {TRITON_URL} | model: {MODEL_NAME}")
         return client
 
-    except InferenceServerException as e:
-        raise RuntimeError(f"Triton connection failed: {e}")
+    except Exception as e:
+        raise RuntimeError(f"Triton connection failed: {e}") from e
 
 
 def infer_single_chunk(client: InferenceServerClient, chunk: np.ndarray) -> np.ndarray | None:
