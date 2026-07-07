@@ -43,6 +43,7 @@ API_PORT = _env_int("API_PORT", 8080)
 
 # Qdrant
 QDRANT_URL = _env_str("QDRANT_URL", "http://localhost:6333")
+QDRANT_API_KEY = os.getenv("QDRANT_API_KEY")  # None if not set (unauthenticated)
 COLLECTION_NAME = _env_str("COLLECTION_NAME", "speakers")
 VECTOR_SIZE = _env_int("VECTOR_SIZE", 192)
 

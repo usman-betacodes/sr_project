@@ -2,14 +2,14 @@ from collections import defaultdict
 from qdrant_client import QdrantClient
 
 from config import (
-    FALLBACK_MIN_SCORE, FALLBACK_ENABLED, QDRANT_URL, COLLECTION_NAME,
-    TOP_K, MIN_HITS_REQUIRED, REJECT_THRESHOLD
+    FALLBACK_MIN_SCORE, FALLBACK_ENABLED, QDRANT_URL, QDRANT_API_KEY,
+    COLLECTION_NAME, TOP_K, MIN_HITS_REQUIRED, REJECT_THRESHOLD
 )
 
 
 def create_qdrant_client() -> QdrantClient:
     """Creates and returns a Qdrant client. Called once at startup."""
-    return QdrantClient(url=QDRANT_URL)
+    return QdrantClient(url=QDRANT_URL, api_key=QDRANT_API_KEY)
 
 
 def identify_speaker(vector: list[float], client: QdrantClient) -> dict:
